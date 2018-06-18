@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingCanchas", "Canchas\BookingCanchas.csproj", "{5D38F549-08F7-4D9A-AB46-01EE67ECAE3B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{BC18FAD1-7635-4047-812A-39AC9E8D2341}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerService\LoggerService.csproj", "{56BA294F-6EDA-4820-8CB9-5D3B675FD962}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5D38F549-08F7-4D9A-AB46-01EE67ECAE3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D38F549-08F7-4D9A-AB46-01EE67ECAE3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D38F549-08F7-4D9A-AB46-01EE67ECAE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D38F549-08F7-4D9A-AB46-01EE67ECAE3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC18FAD1-7635-4047-812A-39AC9E8D2341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC18FAD1-7635-4047-812A-39AC9E8D2341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC18FAD1-7635-4047-812A-39AC9E8D2341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC18FAD1-7635-4047-812A-39AC9E8D2341}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56BA294F-6EDA-4820-8CB9-5D3B675FD962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56BA294F-6EDA-4820-8CB9-5D3B675FD962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56BA294F-6EDA-4820-8CB9-5D3B675FD962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56BA294F-6EDA-4820-8CB9-5D3B675FD962}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A87CC6F6-ECF0-4AA8-B34E-2954F3C3E66D}
+	EndGlobalSection
+EndGlobal
