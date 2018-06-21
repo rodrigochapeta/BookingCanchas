@@ -7,61 +7,65 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Data;
 using Data.Model;
+using Data.Interfaces;
+using LoggerService;
 
-namespace Canchas.Controllers
+namespace BookingCanchas.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
-    public class CustomersController : Controller
+    [ApiController]
+    public class FieldsController : ControllerBase
     {
-        private readonly CanchasDbContext _context;
+        private ILoggerManager _logger;
+        private IRepositoryWrapper _repository;
 
-        public CustomersController(CanchasDbContext context)
+        public FieldsController(ILoggerManager logger, IRepositoryWrapper repository)
         {
-            _context = context;
+            _logger = logger;
+            _repository = repository;
         }
 
-        // GET: api/Customers
+        // GET: api/Fields
         [HttpGet]
-        public IEnumerable<Customer> GetCustomers()
+        public IEnumerable<Field> GetFields()
         {
-            return _context.Customers;
+            return _repository.Field.GetAll();
         }
 
-        // GET: api/Customers/5
+        // GET: api/Fields/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCustomer([FromRoute] int id)
+        public IActionResult GetField([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var customer = await _context.Customers.SingleOrDefaultAsync(m => m.Id == id);
+            var @field = _repository.Field.GetById(id);
 
-            if (customer == null)
+            if (@field == null)
             {
                 return NotFound();
             }
 
-            return Ok(customer);
+            return Ok(@field);
         }
 
-        // PUT: api/Customers/5
+        // PUT: api/Fields/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer([FromRoute] int id, [FromBody] Customer customer)
+        public async Task<IActionResult> PutField([FromRoute] int id, [FromBody] Field @field)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != customer.Id)
+            if (id != @field.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
+            _context.Entry(@field).State = EntityState.Modified;
 
             try
             {
@@ -69,7 +73,7 @@ namespace Canchas.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(id))
+                if (!FieldExists(id))
                 {
                     return NotFound();
                 }
@@ -82,45 +86,45 @@ namespace Canchas.Controllers
             return NoContent();
         }
 
-        // POST: api/Customers
+        // POST: api/Fields
         [HttpPost]
-        public async Task<IActionResult> PostCustomer([FromBody] Customer customer)
+        public async Task<IActionResult> PostField([FromBody] Field @field)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Customers.Add(customer);
+            _context.Fields.Add(@field);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
+            return CreatedAtAction("GetField", new { id = @field.Id }, @field);
         }
 
-        // DELETE: api/Customers/5
+        // DELETE: api/Fields/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer([FromRoute] int id)
+        public async Task<IActionResult> DeleteField([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var customer = await _context.Customers.SingleOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+            var @field = await _context.Fields.FindAsync(id);
+            if (@field == null)
             {
                 return NotFound();
             }
 
-            _context.Customers.Remove(customer);
+            _context.Fields.Remove(@field);
             await _context.SaveChangesAsync();
 
-            return Ok(customer);
+            return Ok(@field);
         }
 
-        private bool CustomerExists(int id)
+        private bool FieldExists(int id)
         {
-            return _context.Customers.Any(e => e.Id == id);
+            return _context.Fields.Any(e => e.Id == id);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Canchas.Controllers
     [Route("api/[controller]")]
     public class SampleDataController : Controller
     {
-
+        public string i = "";
         private ILoggerManager _logger;
         private readonly IGameRepository _gameRepository;
         public SampleDataController(ILoggerManager logger, IGameRepository gameRepository)
