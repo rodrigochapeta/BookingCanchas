@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace Data.Model
 {
@@ -24,4 +22,30 @@ namespace Data.Model
         [Required(ErrorMessage = "Erased is required")]
         public int Erased { get; set; }
     }
+    public static class ISharedModelExtensions
+    {
+
+        public static bool IsNullOrEmpty(this SharedModel entity)
+        {
+            if (!IsObjectNull(entity))
+            {
+                if (!IsEmptyObject(entity))
+                {
+                    return false;
+                }
+                else return false;
+            }
+            else return false;
+        }
+        public static bool IsObjectNull(this SharedModel entity)
+        {
+            return entity == null;
+        }
+
+        public static bool IsEmptyObject(this SharedModel entity)
+        {
+            return entity.Id == 0;
+        }
+    }
 }
+
