@@ -53,7 +53,7 @@ namespace BookingCanchas.Controllers
 
         // PUT: api/Fields/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutField([FromRoute] int id, [FromBody] Field @field)
+        public IActionResult PutField([FromRoute] int id, [FromBody] Field @field)
         {
             if (!ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace BookingCanchas.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(@field).State = EntityState.Modified;
+            _repository.Field.Entry(@field).State = EntityState.Modified;
 
             try
             {
@@ -95,8 +95,8 @@ namespace BookingCanchas.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Fields.Add(@field);
-            await _context.SaveChangesAsync();
+            _repository.Field.Create(@field);
+            await _repository.SaveChangesAsync();
 
             return CreatedAtAction("GetField", new { id = @field.Id }, @field);
         }
