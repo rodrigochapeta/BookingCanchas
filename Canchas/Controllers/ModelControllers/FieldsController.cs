@@ -25,106 +25,232 @@ namespace BookingCanchas.Controllers
             _repository = repository;
         }
 
-        // GET: api/Fields
-        [HttpGet]
-        public IEnumerable<Field> GetFields()
+        // GET: api/<controller>
+        [HttpGet("{id}", Name = "FieldById")]
+        public IActionResult GetById(int id)
         {
-            return _repository.Field.GetAll();
-        }
-
-        // GET: api/Fields/5
-        [HttpGet("{id}")]
-        public IActionResult GetField([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var @field = _repository.Field.GetById(id);
-
-            if (@field == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(@field);
-        }
-
-        // PUT: api/Fields/5
-        [HttpPut("{id}")]
-        public IActionResult PutField([FromRoute] int id, [FromBody] Field @field)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != @field.Id)
-            {
-                return BadRequest();
-            }
-
-            _repository.Field.Entry(@field).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FieldExists(id))
+                var field = _repository.Fields.GetById(id);
+
+                if (field.IsNullOrEmpty())
                 {
+                    _logger.LogError($"Field with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    _logger.LogInfo($"Returned field with id: {id}");
+                    return Ok(field);
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetFieldById action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        // POST: api/Fields
+        [HttpGet("{id}", Name = "FieldByIdWithGameAndBusiness")]
+        public IActionResult GetByIdWithGameAndBusiness(int id)
+        {
+            try
+            {
+                var field = _repository.Fields.GetWithGameAndBusiness(id);
+
+                if (field.IsNullOrEmpty())
+                {
+                    _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInfo($"Returned owner with id: {id}");
+                    return Ok(field);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetByIdWithGameAndBusiness action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet(Name = "FieldGetAll")]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                var fields = _repository.Fields.GetAll();
+
+                _logger.LogInfo($"Returned all fields from database.");
+
+                return Ok(fields);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetAllfields action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet(Name = "FieldGetAllWithGameAndBusiness")]
+        public IActionResult GetAllWithGameAndBusiness()
+        {
+            try
+            {
+                var fields = _repository.Fields.GetAllWithGameAndBusiness();
+
+                _logger.LogInfo($"Returned all fields from database.");
+
+                return Ok(fields);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetAllWithGameAndBusiness action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet("{id}", Name = "FieldByIdWithGameAndBusinessAndBooking")]
+        public IActionResult GetByIdWithGameAndBusinessAndBooking(int id)
+        {
+            try
+            {
+                var field = _repository.Fields.GetWithGameAndBusinessAndBookings(id);
+
+                if (field.IsNullOrEmpty())
+                {
+                    _logger.LogError($"Field with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInfo($"Returned GetByIdWithGameAndBusinessAndBooking with id: {id}");
+                    return Ok(field);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetByIdWithGameAndBusinessAndBooking action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        [HttpGet(Name = "FieldGetAllwithGameAndBusinessAndBooking")]
+        public IActionResult GetAllWithGameAndBusinessAndBooking()
+        {
+            try
+            {
+                var fields = _repository.Fields.GetAllWithGameAndBusinessAndBookings();
+
+                _logger.LogInfo($"Returned all fields from database.");
+
+                return Ok(fields);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetAllWithGameAndBusinessAndBooking action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> PostField([FromBody] Field @field)
+        public IActionResult CreateField([FromBody]Field field)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (field.IsObjectNull())
+                {
+                    _logger.LogError("String object sent from client is null.");
+                    return BadRequest("Field object is null");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid field object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+
+                _repository.Fields.Create(field);
+
+                return CreatedAtRoute("FieldbyId", new { id = field.Id }, field);
             }
-
-            _repository.Field.Create(@field);
-            await _repository.SaveChangesAsync();
-
-            return CreatedAtAction("GetField", new { id = @field.Id }, @field);
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside CreateField action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        // DELETE: api/Fields/5
+        // PUT api/<controller>/5
+        [HttpPut("{id}")]
+        public IActionResult UpdateField(int id, [FromBody]Field field)
+        {
+            try
+            {
+                if (id != field.Id)
+                {
+                    _logger.LogError($"Field object {field.Id} sent from client is different from {id}.");
+                    return BadRequest("Id error");
+                }
+                if (field.IsObjectNull())
+                {
+                    _logger.LogError("Field object sent from client is null.");
+                    return BadRequest("Field object is null");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid field object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+
+                var dbField = _repository.Fields.GetById(id);
+                if (dbField.IsEmptyObject())
+                {
+                    _logger.LogError($"Field with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+
+                _repository.Fields.Update(field);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside UpdateOwner action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteField([FromRoute] int id)
+        public IActionResult DeleteField(int id)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                var field = _repository.Fields.GetWithGameAndBusinessAndBookings(id);
+                if (field.IsEmptyObject())
+                {
+                    _logger.LogError($"Field with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
 
-            var @field = await _context.Fields.FindAsync(id);
-            if (@field == null)
+                if (field.Bookings.Any())
+                {
+                    _logger.LogError($"Cannot delete field with id: {id}. It has related bookings. Delete those bookings first");
+                    return BadRequest("Cannot delete field. It has related bookings. Delete those bookings first");
+                }
+
+                _repository.Fields.Delete(field);
+
+                return NoContent();
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError($"Something went wrong inside DeleteField action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
             }
-
-            _context.Fields.Remove(@field);
-            await _context.SaveChangesAsync();
-
-            return Ok(@field);
-        }
-
-        private bool FieldExists(int id)
-        {
-            return _context.Fields.Any(e => e.Id == id);
         }
     }
 }

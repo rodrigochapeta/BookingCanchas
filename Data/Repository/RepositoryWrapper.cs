@@ -13,7 +13,7 @@ namespace Data.Repository
         private IFieldRepository _field;
         private ICustomerRepository _customer;
         private IBookingRepository _booking;
-        public IGameRepository Game
+        public IGameRepository Games
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Data.Repository
             }
         }
 
-        public IBusinessRepository Business
+        public IBusinessRepository Businesses
         {
             get
             {
@@ -39,7 +39,7 @@ namespace Data.Repository
             }
         }
 
-        public IFieldRepository Field
+        public IFieldRepository Fields
         {
             get
             {
@@ -52,7 +52,7 @@ namespace Data.Repository
             }
         }
 
-        public ICustomerRepository Customer
+        public ICustomerRepository Customers
         {
             get
             {
@@ -65,7 +65,7 @@ namespace Data.Repository
             }
         }
 
-        public IBookingRepository Booking
+        public IBookingRepository Bookings
         {
             get
             {

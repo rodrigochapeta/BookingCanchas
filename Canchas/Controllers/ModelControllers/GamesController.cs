@@ -26,22 +26,22 @@ namespace Canchas.Controllers
         {
             try
             {
-                var game = _repository.Game.GetById(id);
+                var game = _repository.Games.GetById(id);
 
                 if (game.IsNullOrEmpty())
                 {
-                    _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+                    _logger.LogError($"Game with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
                 else
                 {
-                    _logger.LogInfo($"Returned owner with id: {id}");
+                    _logger.LogInfo($"Returned game with id: {id}");
                     return Ok(game);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside GetOwnerById action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside GetGameById action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -50,22 +50,22 @@ namespace Canchas.Controllers
         {
             try
             {
-                var game = _repository.Game.GetWithFields(id);
+                var game = _repository.Games.GetWithFields(id);
 
                 if (game.IsNullOrEmpty())
                 {
-                    _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+                    _logger.LogError($"Game with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
                 else
                 {
-                    _logger.LogInfo($"Returned owner with id: {id}");
+                    _logger.LogInfo($"Returned game with id: {id}");
                     return Ok(game);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside GetOwnerById action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside GetGameById action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -75,15 +75,15 @@ namespace Canchas.Controllers
         {
             try
             {
-                var games = _repository.Game.GetAll();
+                var games = _repository.Games.GetAll();
 
-                _logger.LogInfo($"Returned all owners from database.");
+                _logger.LogInfo($"Returned all games from database.");
 
                 return Ok(games);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside GetAllOwners action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside GetAllOGames action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -93,15 +93,15 @@ namespace Canchas.Controllers
         {
             try
             {
-                var games = _repository.Game.GetAllWithFields();
+                var games = _repository.Games.GetAllWithFields();
 
-                _logger.LogInfo($"Returned all owners from database.");
+                _logger.LogInfo($"Returned all games from database.");
 
                 return Ok(games);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside GetAllOwners action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside GetAllGames action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -124,7 +124,7 @@ namespace Canchas.Controllers
                     return BadRequest("Invalid model object");
                 }
 
-                _repository.Game.Create(game);
+                _repository.Games.Create(game);
 
                 return CreatedAtRoute("GameById", new { id = game.Id }, game);
             }
@@ -158,14 +158,14 @@ namespace Canchas.Controllers
                     return BadRequest("Invalid model object");
                 }
                
-                var dbGame = _repository.Game.GetById(id);
+                var dbGame = _repository.Games.GetById(id);
                 if (dbGame.IsEmptyObject())
                 {
                     _logger.LogError($"Game with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
 
-                _repository.Game.Update(game);
+                _repository.Games.Update(game);
 
                 return NoContent();
             }
@@ -182,20 +182,20 @@ namespace Canchas.Controllers
         {
             try
             {
-                var game = _repository.Game.GetById(id);
+                var game = _repository.Games.GetWithFields(id);
                 if (game.IsEmptyObject())
                 {
                     _logger.LogError($"Game with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
 
-                if (_repository.Game.GetWithFields(id).Fields.Any())
+                if (game.Fields.Any())
                 {
                     _logger.LogError($"Cannot delete game with id: {id}. It has related fields. Delete those fields first");
                     return BadRequest("Cannot delete game. It has related fields. Delete those fields first");
                 }
 
-                _repository.Game.Delete(game);
+                _repository.Games.Delete(game);
 
                 return NoContent();
             }

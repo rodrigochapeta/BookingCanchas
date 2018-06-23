@@ -12,22 +12,6 @@ namespace Canchas.Controllers
     [Route("api/[controller]")]
     public class SampleDataController : Controller
     {
-        public string i = "";
-        private ILoggerManager _logger;
-        private readonly IGameRepository _gameRepository;
-        public SampleDataController(ILoggerManager logger, IGameRepository gameRepository)
-        {
-            _logger = logger;
-            _gameRepository = gameRepository;
-        }
-
-        [HttpGet("[action]")]
-        public IEnumerable<Game> Games()
-        {
-            var listaGames = _gameRepository.GetAll();
-            _logger.LogInfo($"Returned all games from database.");
-            return listaGames;
-        }
 
         private static string[] Summaries = new[]
         {
