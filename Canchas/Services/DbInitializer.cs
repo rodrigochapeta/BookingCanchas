@@ -58,7 +58,8 @@ namespace Canchas
                 context.Customers.Add(justin);
                 context.Customers.Add(justin2);
                 // Add Game 
-                var futbol5 = new Field {
+                var futbol5 = new Game
+                {
                     Name = "Futbol 5",
                     Size = 5, 
                     CreatedBy = -1,
@@ -69,7 +70,7 @@ namespace Canchas
                     Erased = Erased.NO,
                     Status = Status.ACTIVE
                 };
-                var futbol7 = new Field
+                var futbol7 = new Game
                 {
                     Name = "Futbol 7",
                     Size = 7,
@@ -81,7 +82,7 @@ namespace Canchas
                     Erased = Erased.NO,
                     Status = Status.ACTIVE
                 };
-                var futbol11 = new Field
+                var futbol11 = new Game
                 {
                     Name = "Futbol 11",
                     Size = 11,

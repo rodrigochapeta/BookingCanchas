@@ -9,7 +9,7 @@ using System.Linq;
 namespace Canchas.Controllers
 {
     [Route("api/[controller]")]
-    public class GamesController : Controller
+    public class GamesController : ControllerBase
     {
         private ILoggerManager _logger;
         private readonly IRepositoryWrapper _repository;
