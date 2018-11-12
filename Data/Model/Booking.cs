@@ -15,8 +15,12 @@ namespace Data.Model
         [Required]
         public int FieldId { get; set; }
 
+        [Required]
+        [Range(1, 16, ErrorMessage = "La cantidad de horas de alquiler deben ser minimo {1} y maximo {2}.")]
         public int Amount { get; set; }
 
+        [Required]
+        [Range(0, 99999, ErrorMessage = "La cantidad minima cobrada es de {1} y maximo {2}.")]
         public int Charged { get; set; }
 
         [Required] 
